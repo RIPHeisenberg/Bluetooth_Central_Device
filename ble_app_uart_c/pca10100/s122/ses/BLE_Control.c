@@ -271,18 +271,20 @@ void uart_event_handle(app_uart_evt_t * p_event)
         /**@snippet [Handling data from UART] */
         case APP_UART_DATA_READY:
             UNUSED_VARIABLE(app_uart_get(&data_array[index]));
+            app_uart_put(data_array[index]);                    //Input Wieder an den Ausgang schreiben
             index++;
 
             if ((data_array[index - 1] == '\n') ||
                 (data_array[index - 1] == '\r') ||
                 (index >= (m_ble_nus_max_data_len)))
             {
+                printf("\n\r");
                 NRF_LOG_DEBUG("Ready to send data over BLE NUS");
                 NRF_LOG_HEXDUMP_DEBUG(data_array, index);
 
                 do
                 {
-                    ret_val = ble_nus_c_string_send(&m_ble_nus_c, data_array, index);
+                    ret_val = ble_nus_c_string_send(&m_ble_nus_c, data_array, index);                 //TODO Wichtige Funktion
                     if ( (ret_val != NRF_ERROR_INVALID_STATE) && (ret_val != NRF_ERROR_RESOURCES) )
                     {
                         APP_ERROR_CHECK(ret_val);
@@ -645,7 +647,7 @@ static void db_discovery_init(void)
  *
  * @details Handles any pending log operations, then sleeps until the next event occurs.
  */
-static void idle_state_handle(void)
+void idle_state_handle(void)
 {
     if (NRF_LOG_PROCESS() == false)
     {
