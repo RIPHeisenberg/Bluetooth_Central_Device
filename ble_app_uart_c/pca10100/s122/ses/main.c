@@ -725,7 +725,7 @@ int main(void)
     //scan_init();
 
  
-    bluetoothINIT();
+      bluetoothINIT();
     // Start execution.
     printf("BLE UART central example started.\r\n");
     NRF_LOG_INFO("BLE UART central example started.");
@@ -734,6 +734,6 @@ int main(void)
     // Enter main loop.
     for (;;)
     {
-        //idle_state_handle();
+        idle_state_handle();
     }
 }

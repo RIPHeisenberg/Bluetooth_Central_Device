@@ -37,6 +37,6 @@
 ////////////////////////////
 extern void bluetoothINIT(void);
 extern void scan_start(void);
-
+extern void idle_state_handle(void);
 
 #endif //GLOBAL_H_
