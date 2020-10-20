@@ -712,22 +712,10 @@ static void idle_state_handle(void)
 
 int main(void)
 {
-    // Initialize.
-    //log_init();
-    //timer_init();
-    //uart_init();
-    //buttons_leds_init();
-    //db_discovery_init();
-    //power_management_init();
-    //ble_stack_init();
-    //gatt_init();
-    //nus_c_init();
-    //scan_init();
+    bluetoothINIT();
 
- 
-      bluetoothINIT();
     // Start execution.
-    printf("BLE UART central example started.\r\n");
+    printf("BLE_UART_ON\r\n");
     NRF_LOG_INFO("BLE UART central example started.");
     scan_start();
 
