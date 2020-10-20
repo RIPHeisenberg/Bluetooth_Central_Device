@@ -140,6 +140,22 @@ static void scan_evt_handler(scan_evt_t const * p_scan_evt)
                       p_connected->peer_addr.addr[4],
                       p_connected->peer_addr.addr[5]
                       );
+
+            printf("UUID:\n\r");                  //UUID Informationen Ausgeben
+            printf("02x%02x%02x%02x%02x%02x\n\r",
+            p_connected->peer_addr.addr[0],
+            p_connected->peer_addr.addr[1],
+            p_connected->peer_addr.addr[2],
+            p_connected->peer_addr.addr[3],
+            p_connected->peer_addr.addr[4],
+            p_connected->peer_addr.addr[5]
+            );
+
+        nrf_ble_scan_stop();
+        scan_start();
+           
+
+              
          } break;
 
          case NRF_BLE_SCAN_EVT_SCAN_TIMEOUT:
@@ -167,6 +183,7 @@ void bluetoothINIT(void)
     gatt_init();
     nus_c_init();
     scan_init();
+    BLE_AoA_INIT();
 
 }
 
@@ -207,6 +224,7 @@ static void scan_init(void)
 static void db_disc_handler(ble_db_discovery_evt_t * p_evt)
 {
     ble_nus_c_on_db_disc_evt(&m_ble_nus_c, p_evt);
+    
 }
 
 
@@ -459,6 +477,11 @@ static void ble_evt_handler(ble_evt_t const * p_ble_evt, void * p_context)
             APP_ERROR_CHECK(err_code);
             break;
 
+        case BLE_GAP_EVT_RSSI_CHANGED:    //TODO Flag Setzen für datenverarbeitung
+            //Wird aufgerufen wenn die Empfangene Signalstärke sich verändert hat
+            break;
+          
+
         default:
             break;
     }
@@ -655,30 +678,90 @@ void idle_state_handle(void)
     }
 }
 
-/*
-int main(void)
+
+void BLE_AoA_INIT(void)
 {
-    // Initialize.
-    log_init();
-    timer_init();
-    uart_init();
-    buttons_leds_init();
-    db_discovery_init();
-    power_management_init();
-    ble_stack_init();
-    gatt_init();
-    nus_c_init();
-    scan_init();
+  //Informationen zum DFECTRL1 Register sind im Manual (nRF52833_PS_V1.3) auf der Seite 333 aufzufinden                              
+  //TODO Masken Namen ändern anhand des Datenblattes
+ 
+  const int DFE_OFF    = 0x00;  //Ein Ausschalten AoA und AoD anwendungen
+  const int DFE_ON_AoD = 0x02;
+  const int DFE_ON_AoA = 0x03;
 
-    // Start execution.
-    printf("BLE UART central example started.\r\n");
-    NRF_LOG_INFO("BLE UART central example started.");
-    scan_start();
+  uint32_t GAIN_REDUCTION    = 0;   //Abschwächung des CTE Signals von 0(0000) bis 15(1111)   
+  uint32_t REPEAT_PATTERN    = 0;   //Anzahl wiederholungen der Antennen Muster P0, P0, P1, P1, P2, P2, P3, P3, etc. 0 = Keine Wiederholung
+  uint32_t TIME_BTW_SAMPLES  = 1;   //Zeit welche zwischen den Abtastungen benötigt wird. 1 = 4us, 2 = 2us, 3 = 1us, 4 = 0.5us
+  uint32_t SAMPLE_TYPE       = 0;   //Art des Samples IQ = 0  MagPhase = 1
+  uint32_t INTERVAL_BTW_SAMP = 1;   //Intervall zwischen Samples in der RefferenzPeriode. 1 = 4us, 2 = 2us, 3 = 1us, 4 = 0.5us
+  uint32_t TIME_BTW_SWITCHES = 1;   //Zeit zwischen Wechsel der antennen 1 = 4us, 2 = 2us, 3 = 1us
+  uint32_t CTE_EXTENTION     = 1;   //Wenn die CTE ausfgerufen wird. 1 = CrC, 2 = Payload
+  uint32_t TOTAL_LENGHT      = 1;   //Gesammtdauer der CTE in 8us Schritten 00`0000 = 0us, 11`1111 = 512us 
+  
+  //Maske zum Ansteuern des DFECTRL1 Registers
+  uint32_t DFECTRL1_MASK = (GAIN_REDUCTION << 24  | REPEAT_PATTERN << 20   | TIME_BTW_SAMPLES << 16 | SAMPLE_TYPE << 15  | INTERVAL_BTW_SAMP << 12 | TIME_BTW_SWITCHES << 8 | CTE_EXTENTION << 7 | TOTAL_LENGHT);
+  //printf("DFECTRL1 Register %d\n", DFECTRL1_MASK);
 
-    // Enter main loop.
-    for (;;)
-    {
-        idle_state_handle();
-    }
+  NRF_RADIO->DFEMODE  = DFE_ON_AoA;
+  NRF_RADIO->DFECTRL1 = DFECTRL1_MASK;
+
+  NRF_GPIOTE->TASKS_CLR[2];                   //Löschen der IO-Pins
+  NRF_GPIOTE->TASKS_CLR[3];
+  NRF_GPIOTE->TASKS_CLR[4];
+  NRF_GPIOTE->TASKS_CLR[5];
+
+  NRF_RADIO->PSEL.DFEGPIO[2];                 //Pins für den Radio Betrieb
+  NRF_RADIO->PSEL.DFEGPIO[3]; 
+  NRF_RADIO->PSEL.DFEGPIO[4];
+  NRF_RADIO->PSEL.DFEGPIO[5];
+
+  const int ANT_1 = 0b0101;                   //Ansteuerung der einzelnen antennen
+  const int ANT_2 = 0b0110;         
+  const int ANT_3 = 0b0100;
+  const int ANT_4 = 0b1001;
+  const int ANT_5 = 0b1010;
+  const int ANT_6 = 0b1000;
+  const int ANT_7 = 0b1101;
+  const int ANT_8 = 0b1110;
+  const int ANT_9 = 0b1100;
+  const int ANT_10= 0b0001;
+  const int ANT_11= 0b0010;
+  const int ANT_12= 0b0000;
+  const int ANT_ARRAY[12] = {ANT_1, ANT_2, ANT_3, ANT_4, ANT_5, ANT_6, ANT_7, ANT_8, ANT_9, ANT_10, ANT_11, ANT_12};   //Umwandlung vom Reelen wert in Bit wert
+  
+  NRF_RADIO->CLEARPATTERN;                                    //Alte Registerwerte Löschen
+ 
+  for(int i = 0; i < sizeof(ANT_ARRAY)/sizeof(int); i++)      //Ausgabe der Antennensignale anhand des AMT_ARRAY
+  {
+    NRF_RADIO->SWITCHPATTERN = (ANT_ARRAY[i]<<2);             //Das zeichen N korespondiert mit dem Bit an PSEL.DFEGPIO[N] Da wir bei Zwei beginen verschieben wir um 2 nach links
+    //printf("ANT_SWR: %x \n\r",(ANT_ARRAY[i]<<2));
+  }
+  
+
+
+  NRF_RADIO->DFEPACKET.PTR      =   (uint32_t)0x20004000;           //Adresse wo IQ Samples gespeichert werden
+  NRF_RADIO->DFEPACKET.MAXCNT   =   0x1C;                 //Maximale Menge an IQ Samples
+  //int *IQP = (int*) 0x2004000;                            //Alias für besseres verständniss
+  
+  
 }
-*/
+
+
+void IQDataRead(void)
+{
+  //typedef NRF_RADIO->DFEPACKET.PTR  IQP;
+  //IQP = (uint32_t)0x20004000;
+
+
+  for(int i=0; i < NRF_RADIO->DFEPACKET.MAXCNT; i++)      //TODO Funktion für IQ Samples inplementieren 
+  {
+    //printf("IQ: ");
+    //printf("%d \n\r",i, IQP[i]);
+  }
+}
+
+
+
+
+
+
+

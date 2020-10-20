@@ -18,6 +18,8 @@
    void gatt_init(void);
    static void nus_c_init(void);
    static void scan_init(void);
+   void BLE_AoA_INIT(void);
+   void IQDataRead(void);
 
   //////////////////////////////////
   //Bluetooth Functions
