@@ -406,11 +406,29 @@ NRF_PWR_MGMT_HANDLER_REGISTER(shutdown_handler, APP_SHUTDOWN_HANDLER_PRIORITY);
 static void ble_evt_handler(ble_evt_t const * p_ble_evt, void * p_context)
 {
     ret_code_t            err_code;
-    ble_gap_evt_t const * p_gap_evt = &p_ble_evt->evt.gap_evt;
+    ble_gap_evt_t const * p_gap_evt = &p_ble_evt->evt.gap_evt.conn_handle;
+
+
+    uint8_t *p_rssi     = (uint8_t*)calloc(1,sizeof(uint8_t));        // * @param[out] p_rssi     Pointer to the location where the RSSI measurement shall be stored.
+    uint8_t *p_ch_index = (uint8_t*)calloc(1,sizeof(uint8_t));    //* @param[out] p_ch_index  Pointer to the location where Channel Index for the RSSI measurement shall be stored.
+
+
+    ble_gap_qos_params_t            qos_params;                            //Parameter für die sd_ble_gap_qos_start funktion
+    qos_params.rssi.conn_handle   = p_ble_evt->evt.gap_evt.conn_handle; 
+    qos_params.rssi.threshold_dbm = 5;
+    qos_params.rssi.skip_count    = 5;
+
+
+    //ble_gap_qos_params_t *p_qos_params = qos_params;
+
 
     switch (p_ble_evt->header.evt_id)
     {
         case BLE_GAP_EVT_CONNECTED:
+
+            sd_ble_gap_qos_start(1, &qos_params);    //Funktion zum RSSI zu starten QoS = Quality of service  Parameter 1 steht fpr QOS_IDS 
+            printf("RSSI Init");
+            
             err_code = ble_nus_c_handles_assign(&m_ble_nus_c, p_ble_evt->evt.gap_evt.conn_handle, NULL);
             APP_ERROR_CHECK(err_code);
 
@@ -477,14 +495,21 @@ static void ble_evt_handler(ble_evt_t const * p_ble_evt, void * p_context)
             APP_ERROR_CHECK(err_code);
             break;
 
-        case BLE_GAP_EVT_RSSI_CHANGED:    //TODO Flag Setzen für datenverarbeitung
-            //Wird aufgerufen wenn die Empfangene Signalstärke sich verändert hat
+        case BLE_GAP_EVT_RSSI_CHANGED:
+           //Wird Aufgerufen wenn die RSSI sich um mehr als 5dB ändert
+      
+            err_code = sd_ble_gap_rssi_get(p_ble_evt->evt.gap_evt.conn_handle, p_rssi, p_ch_index);
+            APP_ERROR_CHECK(err_code);
+            printf("RSSI = %d\n\r", *p_rssi);
+            
             break;
           
 
         default:
             break;
     }
+    free(p_rssi);
+    free(p_ch_index);
 }
 
 
