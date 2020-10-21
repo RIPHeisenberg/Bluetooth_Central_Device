@@ -410,7 +410,7 @@ static void ble_evt_handler(ble_evt_t const * p_ble_evt, void * p_context)
 
 
     uint8_t *p_rssi     = (uint8_t*)calloc(1,sizeof(uint8_t));        // * @param[out] p_rssi     Pointer to the location where the RSSI measurement shall be stored.
-    uint8_t *p_ch_index = (uint8_t*)calloc(1,sizeof(uint8_t));    //* @param[out] p_ch_index  Pointer to the location where Channel Index for the RSSI measurement shall be stored.
+    uint8_t *p_ch_index = (uint8_t*)calloc(1,sizeof(uint8_t));        //* @param[out] p_ch_index  Pointer to the location where Channel Index for the RSSI measurement shall be stored.
 
 
     ble_gap_qos_params_t            qos_params;                            //Parameter für die sd_ble_gap_qos_start funktion
@@ -501,6 +501,7 @@ static void ble_evt_handler(ble_evt_t const * p_ble_evt, void * p_context)
             err_code = sd_ble_gap_rssi_get(p_ble_evt->evt.gap_evt.conn_handle, p_rssi, p_ch_index);
             APP_ERROR_CHECK(err_code);
             printf("RSSI = %d\n\r", *p_rssi);
+            IQDataRead();
             
             break;
           
@@ -761,26 +762,22 @@ void BLE_AoA_INIT(void)
     //printf("ANT_SWR: %x \n\r",(ANT_ARRAY[i]<<2));
   }
   
+  #define DFEPACKET_MAX  512
+  uint32_t *dfePacket = (uint32_t*)calloc(DFEPACKET_MAX, sizeof(uint32_t));        // * @param[out] p_rssi     Pointer to the location where the RSSI measurement shall be stored.
+  //static uint32_t dfePacket[DFEPACKET_MAX];
 
+  NRF_RADIO->DFEPACKET.PTR      =   dfePacket;           //Adresse wo IQ Samples gespeichert werden
+  NRF_RADIO->DFEPACKET.MAXCNT   =   DFEPACKET_MAX;                 //Maximale Menge an IQ Samples
 
-  NRF_RADIO->DFEPACKET.PTR      =   (uint32_t)0x20004000;           //Adresse wo IQ Samples gespeichert werden
-  NRF_RADIO->DFEPACKET.MAXCNT   =   0x1C;                 //Maximale Menge an IQ Samples
-  //int *IQP = (int*) 0x2004000;                            //Alias für besseres verständniss
-  
-  
 }
 
 
 void IQDataRead(void)
 {
-  //typedef NRF_RADIO->DFEPACKET.PTR  IQP;
-  //IQP = (uint32_t)0x20004000;
-
-
-  for(int i=0; i < NRF_RADIO->DFEPACKET.MAXCNT; i++)      //TODO Funktion für IQ Samples inplementieren 
+  int i = 0;
+  for(i=0; i < NRF_RADIO->DFEPACKET.MAXCNT; i++)      //TODO Funktion für IQ Samples inplementieren 
   {
-    //printf("IQ: ");
-    //printf("%d \n\r",i, IQP[i]);
+    printf("IQData: %d", NRF_RADIO->DFEPACKET.PTR[i]);
   }
 }
 
