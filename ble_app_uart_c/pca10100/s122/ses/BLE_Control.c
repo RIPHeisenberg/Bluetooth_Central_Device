@@ -183,8 +183,8 @@ void bluetoothINIT(void)
     gatt_init();
     nus_c_init();
     scan_init();
+    GPIOConfig();
     BLE_AoA_INIT();
-
 }
 
 
@@ -501,7 +501,7 @@ static void ble_evt_handler(ble_evt_t const * p_ble_evt, void * p_context)
             err_code = sd_ble_gap_rssi_get(p_ble_evt->evt.gap_evt.conn_handle, p_rssi, p_ch_index);
             APP_ERROR_CHECK(err_code);
             printf("RSSI = %d\n\r", *p_rssi);
-            IQDataRead();
+            IQDataRead();                       //Auslesen der IQ Daten wenn RSSI Event eintrifft
             
             break;
           
@@ -707,38 +707,42 @@ void idle_state_handle(void)
 
 void BLE_AoA_INIT(void)
 {
-  //Informationen zum DFECTRL1 Register sind im Manual (nRF52833_PS_V1.3) auf der Seite 333 aufzufinden                              
-  //TODO Masken Namen ändern anhand des Datenblattes
- 
-  const int DFE_OFF    = 0x00;  //Ein Ausschalten AoA und AoD anwendungen
+  //Informationen zum DFECTRL1 Register sind im Manual (nRF52833_PS_V1.3) auf der Seite 333 aufzufinden
+
+  const int DFE_OFF    = 0x00;                         //Ein Ausschalten AoA und AoD anwendungen
   const int DFE_ON_AoD = 0x02;
   const int DFE_ON_AoA = 0x03;
 
-  uint32_t GAIN_REDUCTION    = 0;   //Abschwächung des CTE Signals von 0(0000) bis 15(1111)   
-  uint32_t REPEAT_PATTERN    = 0;   //Anzahl wiederholungen der Antennen Muster P0, P0, P1, P1, P2, P2, P3, P3, etc. 0 = Keine Wiederholung
-  uint32_t TIME_BTW_SAMPLES  = 1;   //Zeit welche zwischen den Abtastungen benötigt wird. 1 = 4us, 2 = 2us, 3 = 1us, 4 = 0.5us
-  uint32_t SAMPLE_TYPE       = 0;   //Art des Samples IQ = 0  MagPhase = 1
-  uint32_t INTERVAL_BTW_SAMP = 1;   //Intervall zwischen Samples in der RefferenzPeriode. 1 = 4us, 2 = 2us, 3 = 1us, 4 = 0.5us
-  uint32_t TIME_BTW_SWITCHES = 1;   //Zeit zwischen Wechsel der antennen 1 = 4us, 2 = 2us, 3 = 1us
-  uint32_t CTE_EXTENTION     = 1;   //Wenn die CTE ausfgerufen wird. 1 = CrC, 2 = Payload
-  uint32_t TOTAL_LENGHT      = 1;   //Gesammtdauer der CTE in 8us Schritten 00`0000 = 0us, 11`1111 = 512us 
+  uint32_t AGCBACKOFFGAIN                       = 0;   //Abschwächung des CTE Signals von 0(0000) bis 15(1111)   
+  uint32_t REPEATPATTERN                        = 1;   //Anzahl wiederholungen der Antennen Muster P0, P0, P1, P1, P2, P2, P3, P3, etc. 0 = Keine Wiederholung
+  uint32_t TSAMPLESPACING                       = 3;   //Zeit welche zwischen den Abtastungen benötigt wird. 1 = 4us, 2 = 2us, 3 = 1us, 4 = 0.5us
+  uint32_t SAMPLETYPE                           = 0;   //Art des Samples IQ = 0  MagPhase = 1
+  uint32_t TSAMPLESPACINGREF                    = 1;   //Intervall zwischen Samples in der RefferenzPeriode. 1 = 4us, 2 = 2us, 3 = 1us, 4 = 0.5us
+  uint32_t TSWITCHINGSPACING                    = 1;   //Zeit zwischen Wechsel der antennen 1 = 4us, 2 = 2us, 3 = 1us
+  uint32_t DFEINEXTENSION                       = 1;   //Wenn die CTE ausfgerufen wird. 1 = Nach CrC, 2 = Payload
+  uint32_t NUMBEROF8US                          = 5;   //Gesammtdauer der CTE in 8us Schritten 00`0000 = 0us, 11`1111 = 512us 
   
   //Maske zum Ansteuern des DFECTRL1 Registers
-  uint32_t DFECTRL1_MASK = (GAIN_REDUCTION << 24  | REPEAT_PATTERN << 20   | TIME_BTW_SAMPLES << 16 | SAMPLE_TYPE << 15  | INTERVAL_BTW_SAMP << 12 | TIME_BTW_SWITCHES << 8 | CTE_EXTENTION << 7 | TOTAL_LENGHT);
-  //printf("DFECTRL1 Register %d\n", DFECTRL1_MASK);
+  //TODO Maske überprüfen
+  uint32_t DFECTRL1_MASK = (AGCBACKOFFGAIN << 23  | REPEATPATTERN << 19   | TSAMPLESPACING << 15 | SAMPLETYPE << 14 | TSAMPLESPACINGREF << 11 | TSWITCHINGSPACING << 7 | DFEINEXTENSION << 6 | NUMBEROF8US);
 
-  NRF_RADIO->DFEMODE  = DFE_ON_AoA;
+  NRF_RADIO->DFEMODE  = DFE_ON_AoA;           //Radio Register beschreiben
   NRF_RADIO->DFECTRL1 = DFECTRL1_MASK;
 
-  NRF_GPIOTE->TASKS_CLR[2];                   //Löschen der IO-Pins
-  NRF_GPIOTE->TASKS_CLR[3];
-  NRF_GPIOTE->TASKS_CLR[4];
-  NRF_GPIOTE->TASKS_CLR[5];
+  const uint32_t PIN1      = 3;               //PINS für ansteuerung
+  const uint32_t PIN2      = 4;
+  const uint32_t PIN3      = 28;
+  const uint32_t PIN4      = 29;
+  const uint32_t PORT      = 0;               //Auswahl des Porsts
+  const uint32_t CONNECT   = 0;               //CONNECT = 0 ist verbunden auf ausgang
+  
 
-  NRF_RADIO->PSEL.DFEGPIO[2];                 //Pins für den Radio Betrieb
-  NRF_RADIO->PSEL.DFEGPIO[3]; 
-  NRF_RADIO->PSEL.DFEGPIO[4];
-  NRF_RADIO->PSEL.DFEGPIO[5];
+  //TODO Maske Erstellen anhand vom datenblatt
+  NRF_RADIO->PSEL.DFEGPIO[0] = (CONNECT << 30 | PORT << 4 | PIN1);              //Pins für den Radio Betrieb
+  NRF_RADIO->PSEL.DFEGPIO[1] = (CONNECT << 30 | PORT << 4 | PIN2); 
+  NRF_RADIO->PSEL.DFEGPIO[2] = (CONNECT << 30 | PORT << 4 | PIN3);
+  NRF_RADIO->PSEL.DFEGPIO[3] = (CONNECT << 30 | PORT << 4 | PIN4);
+
 
   const int ANT_1 = 0b0101;                   //Ansteuerung der einzelnen antennen
   const int ANT_2 = 0b0110;         
@@ -758,27 +762,65 @@ void BLE_AoA_INIT(void)
  
   for(int i = 0; i < sizeof(ANT_ARRAY)/sizeof(int); i++)      //Ausgabe der Antennensignale anhand des AMT_ARRAY
   {
-    NRF_RADIO->SWITCHPATTERN = (ANT_ARRAY[i]<<2);             //Das zeichen N korespondiert mit dem Bit an PSEL.DFEGPIO[N] Da wir bei Zwei beginen verschieben wir um 2 nach links
-    //printf("ANT_SWR: %x \n\r",(ANT_ARRAY[i]<<2));
+    //TODO SWITCHPATERN OFFSET überprüfen
+    NRF_RADIO->SWITCHPATTERN = ANT_ARRAY[i];             //Das zeichen N korespondiert mit dem Bit an PSEL.DFEGPIO[N] Da wir bei Zwei beginen verschieben wir um 2 nach links
   }
-  
-  #define DFEPACKET_MAX  512
-  uint32_t *dfePacket = (uint32_t*)calloc(DFEPACKET_MAX, sizeof(uint32_t));        // * @param[out] p_rssi     Pointer to the location where the RSSI measurement shall be stored.
-  //static uint32_t dfePacket[DFEPACKET_MAX];
 
-  NRF_RADIO->DFEPACKET.PTR      =   dfePacket;           //Adresse wo IQ Samples gespeichert werden
-  NRF_RADIO->DFEPACKET.MAXCNT   =   DFEPACKET_MAX;                 //Maximale Menge an IQ Samples
-
+  //Maximale Menge an IQ Samples
+  #define DFEPACKET_MAX  200
+  NRF_RADIO->DFEPACKET.PTR      =   (uint32_t)calloc(DFEPACKET_MAX, sizeof(uint32_t));
+  NRF_RADIO->DFEPACKET.MAXCNT   =   DFEPACKET_MAX;
 }
 
 
-void IQDataRead(void)
+
+
+void IQDataRead(void)                                     //Funktion wird aufgerufen wenn ein RSSI Event eintrifft
 {
-  int i = 0;
-  for(i=0; i < NRF_RADIO->DFEPACKET.MAXCNT; i++)      //TODO Funktion für IQ Samples inplementieren 
+  static union IQUnion
   {
-    printf("IQData: %d", NRF_RADIO->DFEPACKET.PTR[i]);
+    uint32_t IQ;
+    uint16_t IQA[2];
+  }IQData;
+
+  uint32_t *IQ_p = NRF_RADIO->DFEPACKET.PTR;                //Speicheraddresse an Pointer übergeben
+
+  printf("AMOUNT: %d\r\n", NRF_RADIO->DFEPACKET.AMOUNT);
+  for(int i=0; i < NRF_RADIO->DFEPACKET.AMOUNT; i++)      //TODO Funktion für IQ Samples inplementieren 
+  {
+    IQData.IQ  =   IQ_p[i];
+    printf("I", IQData.IQA[0]);
+    printf("Q", IQData.IQA[1]);
   }
+}
+
+
+
+static void GPIOConfig(void)
+{ 
+  //Pin 2-5 als Output deffinieren Vergleich Schema RefDesing
+  uint32_t RADIO1 = 3;        //Pinzuweisung RFSwitch A0-A4
+  uint32_t RADIO2 = 4; 
+  uint32_t RADIO3 = 28; 
+  uint32_t RADIO4 = 29;
+   
+  nrf_gpio_pin_dir_t    dir      = NRF_GPIO_PIN_DIR_OUTPUT;       //Pin Configuration
+  nrf_gpio_pin_input_t  input    = NRF_GPIO_PIN_INPUT_DISCONNECT; 
+  nrf_gpio_pin_pull_t   pull     = GPIO_PIN_CNF_PULL_Disabled;        
+  nrf_gpio_pin_drive_t  drive    = NRF_GPIO_PIN_S0S1;
+  nrf_gpio_pin_sense_t  sense    = NRF_GPIO_PIN_NOSENSE; 
+
+
+  nrf_gpio_cfg(RADIO1, dir ,input, pull, drive, sense);
+  nrf_gpio_cfg(RADIO2, dir ,input, pull, drive, sense);
+  nrf_gpio_cfg(RADIO3, dir ,input, pull, drive, sense);
+  nrf_gpio_cfg(RADIO4, dir ,input, pull, drive, sense);
+
+
+  nrf_gpio_port_out_write(NRF_P0, (0xF<<2));     //2 Pins als Offset initialsierungs Test
+  nrf_gpio_port_out_write(NRF_P0, (0x0<<2));
+  nrf_gpio_port_out_write(NRF_P0, (0xF<<2));
+  nrf_gpio_port_out_write(NRF_P0, (0x0<<2));
 }
 
 

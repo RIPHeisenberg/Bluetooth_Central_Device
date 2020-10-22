@@ -20,6 +20,7 @@
    static void scan_init(void);
    void BLE_AoA_INIT(void);
    void IQDataRead(void);
+   static void GPIOConfig(void);
 
   //////////////////////////////////
   //Bluetooth Functions

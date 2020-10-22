@@ -2,7 +2,11 @@
 <session>
  <Bookmarks/>
  <Breakpoints groups="Breakpoints" active_group="Breakpoints">
-  <BreakpointListItem trigger="" line="673" counter="0" hardwareBreakpoint="" isFunctionBreakpoint="false" action="" expression="" group="Breakpoints" type="Breakpoint" state="4" filename="BLE_Control.c" useHWbreakpoint="false"/>
+  <BreakpointListItem trigger="" line="729" counter="0" hardwareBreakpoint="" isFunctionBreakpoint="false" action="" expression="" group="Breakpoints" type="Breakpoint" state="2" filename="BLE_Control.c" useHWbreakpoint="false"/>
+  <BreakpointListItem trigger="" line="741" counter="0" hardwareBreakpoint="" isFunctionBreakpoint="false" action="" expression="" group="Breakpoints" type="Breakpoint" state="2" filename="BLE_Control.c" useHWbreakpoint="false"/>
+  <BreakpointListItem trigger="" line="742" counter="0" hardwareBreakpoint="" isFunctionBreakpoint="false" action="" expression="" group="Breakpoints" type="Breakpoint" state="2" filename="BLE_Control.c" useHWbreakpoint="false"/>
+  <BreakpointListItem trigger="" line="743" counter="0" hardwareBreakpoint="" isFunctionBreakpoint="false" action="" expression="" group="Breakpoints" type="Breakpoint" state="2" filename="BLE_Control.c" useHWbreakpoint="false"/>
+  <BreakpointListItem trigger="" line="744" counter="0" hardwareBreakpoint="" isFunctionBreakpoint="false" action="" expression="" group="Breakpoints" type="Breakpoint" state="2" filename="BLE_Control.c" useHWbreakpoint="false"/>
   <BreakpointListItem trigger="" line="73" counter="0" hardwareBreakpoint="" isFunctionBreakpoint="false" action="" expression="" group="Breakpoints" type="Breakpoint" state="4" filename="../../../main.c" useHWbreakpoint="false"/>
   <BreakpointListItem trigger="" line="75" counter="0" hardwareBreakpoint="" isFunctionBreakpoint="false" action="" expression="" group="Breakpoints" type="Breakpoint" state="4" filename="../../../main.c" useHWbreakpoint="false"/>
   <BreakpointListItem trigger="" line="80" counter="0" hardwareBreakpoint="" isFunctionBreakpoint="false" action="" expression="" group="Breakpoints" type="Breakpoint" state="4" filename="../../../main.c" useHWbreakpoint="false"/>
@@ -28,15 +32,10 @@
   <ProjectSessionItem path="ble_app_uart_c_pca10100_s122"/>
   <ProjectSessionItem path="ble_app_uart_c_pca10100_s122;ble_app_uart_c_pca10100_s122"/>
   <ProjectSessionItem path="ble_app_uart_c_pca10100_s122;ble_app_uart_c_pca10100_s122;Application"/>
-  <ProjectSessionItem path="ble_app_uart_c_pca10100_s122;ble_app_uart_c_pca10100_s122;None"/>
-  <ProjectSessionItem path="ble_app_uart_c_pca10100_s122;ble_app_uart_c_pca10100_s122;nRF_BLE"/>
-  <ProjectSessionItem path="ble_app_uart_c_pca10100_s122;ble_app_uart_c_pca10100_s122;nRF_BLE_Services"/>
   <ProjectSessionItem path="ble_app_uart_c_pca10100_s122;ble_app_uart_c_pca10100_s122;nRF_Libraries"/>
-  <ProjectSessionItem path="ble_app_uart_c_pca10100_s122;ble_app_uart_c_pca10100_s122;nRF_Log"/>
-  <SourceCodeControlLogin password="F9BB6682F5D56822" user=""/>
  </Project>
  <Register1>
-  <RegisterWindow visibleNodes="CPU - Current Context/r0;CPU - Current Context/r1;CPU - Current Context/r2;CPU - Current Context/r3;CPU - Current Context/r4;CPU - Current Context/r5;CPU - Current Context/r6;CPU - Current Context/r7;CPU - Current Context/r8;CPU - Current Context/r9;CPU - Current Context/r10;CPU - Current Context/r11;CPU - Current Context/r12;CPU - Current Context/sp(r13);CPU - Current Context/lr(r14);CPU - Current Context/pc(r15);CPU - Current Context/apsr;CPU/r0;CPU/r1;CPU/r2;CPU/r3;CPU/r4;CPU/r5;CPU/r6;CPU/r7;CPU/r8;CPU/r9;CPU/r10;CPU/r11;CPU/r12;CPU/sp(r13);CPU/lr(r14);CPU/pc(r15);CPU/xpsr;CPU/msp;CPU/psp;CPU/cfbp;CPU/internal" binaryNodes="" asciiNodes="" openNodes="CPU - Current Context" name="ble_app_uart_c_pca10100_s122" decimalNodes="" octalNodes="" unsignedNodes=""/>
+  <RegisterWindow visibleNodes="CPU - Current Context/r0;CPU - Current Context/r1;CPU - Current Context/r2;CPU - Current Context/r3;CPU - Current Context/r4;CPU - Current Context/r5;CPU - Current Context/r6;CPU - Current Context/r7;CPU - Current Context/r8;CPU - Current Context/r9;CPU - Current Context/r10;CPU - Current Context/r11;CPU - Current Context/r12;CPU - Current Context/sp(r13);CPU - Current Context/lr(r14);CPU - Current Context/pc(r15);CPU - Current Context/apsr;CPU/r0;CPU/r1;CPU/r2;CPU/r3;CPU/r4;CPU/r5;CPU/r6;CPU/r7;CPU/r8;CPU/r9;CPU/r10;CPU/r11;CPU/r12;CPU/sp(r13);CPU/lr(r14);CPU/pc(r15);CPU/xpsr;CPU/msp;CPU/psp;CPU/cfbp;CPU/internal" binaryNodes="" asciiNodes="" openNodes="CPU - Current Context;CPU" name="ble_app_uart_c_pca10100_s122" decimalNodes="" octalNodes="" unsignedNodes=""/>
  </Register1>
  <Register2>
   <RegisterWindow visibleNodes="CPU - Current Context/r0;CPU - Current Context/r1;CPU - Current Context/r2;CPU - Current Context/r3;CPU - Current Context/r4;CPU - Current Context/r5;CPU - Current Context/r6;CPU - Current Context/r7;CPU - Current Context/r8;CPU - Current Context/r9;CPU - Current Context/r10;CPU - Current Context/r11;CPU - Current Context/r12;CPU - Current Context/sp(r13);CPU - Current Context/lr(r14);CPU - Current Context/pc(r15);CPU - Current Context/apsr;CPU/r0;CPU/r1;CPU/r2;CPU/r3;CPU/r4;CPU/r5;CPU/r6;CPU/r7;CPU/r8;CPU/r9;CPU/r10;CPU/r11;CPU/r12;CPU/sp(r13);CPU/lr(r14);CPU/pc(r15);CPU/xpsr;CPU/msp;CPU/psp;CPU/cfbp;CPU/internal" binaryNodes="" asciiNodes="" openNodes="CPU - Current Context" name="ble_app_uart_c_pca10100_s122" decimalNodes="" octalNodes="" unsignedNodes=""/>
@@ -67,10 +66,15 @@
  </Watch4>
  <Files>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="8" useTextEdit="1" openedFrom="//svm-c113.hsr.ch/ostredirect/maikel.schuurmans/Documents/Bluetooth_Central_Device/ble_app_uart_c/pca10100/s122/ses/main.c" useBinaryEdit="0" left="0" path="global.h" selected="0" top="3" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="3" y="27" useTextEdit="1" openedFrom="//svm-c113.hsr.ch/ostredirect/maikel.schuurmans/Documents/Bluetooth_Central_Device/ble_app_uart_c/pca10100/s122/ses/main.c" useBinaryEdit="0" left="0" path="BLE_Control.h" selected="0" top="0" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="main.c" selected="0" top="0" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="784" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="BLE_Control.c" selected="1" top="731" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="18" y="282" useTextEdit="1" openedFrom="C:/Users/Maikel/Documents/Bluetooth_Central_Device/ble_app_uart_c/pca10100/s122/ses/BLE_Control.c" useBinaryEdit="0" left="0" path="../../../../../NRF5_SDK_17.0.2/modules/nrfx/mdk/nrf52833.h" selected="0" top="253" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="22" useTextEdit="1" openedFrom="//svm-c113.hsr.ch/ostredirect/maikel.schuurmans/Documents/Bluetooth_Central_Device/ble_app_uart_c/pca10100/s122/ses/main.c" useBinaryEdit="0" left="0" path="BLE_Control.h" selected="0" top="0" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="724" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="main.c" selected="0" top="693" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="187" useTextEdit="1" openedFrom="//svm-c113.hsr.ch/ostredirect/maikel.schuurmans/Documents/Bluetooth_Central_Device/ble_app_uart_c/pca10100/s122/ses/main.c" useBinaryEdit="0" left="0" path="BLE_Control.c" selected="0" top="169" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="103" useTextEdit="1" openedFrom="//svm-c113.hsr.ch/ostredirect/maikel.schuurmans/Documents/Bluetooth_Central_Device/ble_app_uart_c/pca10100/s122/ses/BLE_Control.c" useBinaryEdit="0" left="0" path="../../../../../nRF5_SDK/modules/nrfx/hal/nrf_gpio.h" selected="0" top="82" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="219" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../../../nRF5_SDK/components/libraries/util/app_util.h" selected="0" top="187" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="110" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../../C_Includes/nRF_Libraries/app_error_weak.c" selected="1" top="78" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="6662" useTextEdit="1" openedFrom="//svm-c113.hsr.ch/ostredirect/maikel.schuurmans/Documents/Bluetooth_Central_Device/ble_app_uart_c/pca10100/s122/ses/BLE_Control.c" useBinaryEdit="0" left="0" path="../../../../../nRF5_SDK/modules/nrfx/mdk/nrf52833_bitfields.h" selected="0" top="6641" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="40" y="274" useTextEdit="1" openedFrom="//svm-c113.hsr.ch/ostredirect/maikel.schuurmans/Documents/Bluetooth_Central_Device/ble_app_uart_c/pca10100/s122/ses/BLE_Control.c" useBinaryEdit="0" left="0" path="../../../../../nRF5_SDK/modules/nrfx/mdk/nrf52833.h" selected="0" top="252" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="701" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../../../nRF5_SDK/components/softdevice/s122/headers/nrf_soc.h" selected="0" top="680" codecName=""/>
  </Files>
- <ARMCrossStudioWindow activeProject="ble_app_uart_c_pca10100_s122" fileDialogDefaultFilter="*.c" autoConnectTarget="J-Link" buildConfiguration="Release" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="//svm-c113.hsr.ch/ostredirect/maikel.schuurmans/Documents/Bluetooth_Central_Device/ble_app_uart_c" debugSearchPath="" autoConnectCapabilities="3199"/>
+ <ARMCrossStudioWindow activeProject="ble_app_uart_c_pca10100_s122" fileDialogDefaultFilter="*.c" autoConnectTarget="J-Link" buildConfiguration="Release" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="//svm-c113.hsr.ch/ostredirect/maikel.schuurmans/Documents/Bluetooth_Central_Device/ble_app_uart_c" debugSearchPath="" autoConnectCapabilities="3711"/>
 </session>

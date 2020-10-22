@@ -715,7 +715,7 @@ int main(void)
     bluetoothINIT();
 
     // Start execution.
-    printf("BLE_UART_ON\r\n");
+    printf("Central Device ON\n");
     NRF_LOG_INFO("BLE UART central example started.");
     scan_start();
 
